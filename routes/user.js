@@ -5,7 +5,7 @@ const user = require("../controllers/user.js");
 router
   .get("/", user.onGetAllUsers)
   .post("/", user.onCreateUser)
-  .get("/:id", user.onGetUserById)
-  .delete("/:id", user.onDeleteUserById);
+  .get("/:id", user.onDeleteUserByUsername)
+  .delete("/:id", user.onDeleteUserByUsername);
 
-export default router;
+module.exports = router;

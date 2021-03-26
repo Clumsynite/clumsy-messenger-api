@@ -1,32 +1,38 @@
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
 // models
-const UserModel = require("../models/User.js");
+const User = require("../models/User.js");
 
 const SECRET_KEY = process.env.SECRET;
 
-export const encode = async (req, res, next) => {
-  try {
-    const { userId } = req.params;
-    const user = await UserModel.getUserById(userId);
-    const payload = {
-      userId: user._id,
-      userType: user.type,
-    };
-    const authToken = jwt.sign(payload, SECRET_KEY);
-    console.log("Auth", authToken);
-    req.authToken = authToken;
-    next();
-  } catch (error) {
-    return res.status(400).json({ success: false, message: error.error });
-  }
-};
+// exports.encode = async (req, res, next) => {
+//   try {
+//     const { username, password } = req.body;
+//     const user = await User.findOne({ username, password });
 
-export const decode = async (req, res, next) => {
+//     console.log("User ", user)
+//     const payload = {
+//       userId: user._id,
+//       fullname: `${user.firstname} ${user.lastname}`,
+//       ...user,
+//       password: "*****",
+//     };
+//     const authToken = jwt.sign(payload, SECRET_KEY);
+//     req.authToken = authToken;
+//     console.log("Auth token: ", authToken)
+//     next();
+//   } catch (error) {
+//     return res.status(400).json({ success: false, error });
+//   }
+// };
+
+exports.decode = async (req, res, next) => {
   if (!req.headers["authorization"]) {
+    
+  console.log("REQ USER", req.user)
     return res
       .status(400)
-      .json({ success: false, message: "No access token provided" });
+      .json({ success: false, error: "No access token provided" });
   }
   const accessToken = req.headers.authorization.split(" ")[1];
   try {
@@ -35,6 +41,6 @@ export const decode = async (req, res, next) => {
     req.userType = decoded.type;
     return next();
   } catch (error) {
-    return res.status(401).json({ success: false, message: error.message });
+    return res.status(401).json({ success: false, error });
   }
 };
