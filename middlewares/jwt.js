@@ -27,20 +27,43 @@ const SECRET_KEY = process.env.SECRET;
 // };
 
 exports.decode = async (req, res, next) => {
-  if (!req.headers["authorization"]) {
-    
-  console.log("REQ USER", req.user)
-    return res
-      .status(400)
-      .json({ success: false, error: "No access token provided" });
-  }
-  const accessToken = req.headers.authorization.split(" ")[1];
-  try {
-    const decoded = jwt.verify(accessToken, SECRET_KEY);
-    req.userId = decoded.userId;
-    req.userType = decoded.type;
-    return next();
-  } catch (error) {
-    return res.status(401).json({ success: false, error });
+  // if (!req.headers["authorization"]) {
+
+  // console.log("REQ USER", req.user)
+  //   return res
+  //     .status(400)
+  //     .json({ success: false, error: "No access token provided" });
+  // }
+  // const accessToken = req.headers.authorization.split(" ")[1];
+  // try {
+  //   const decoded = jwt.verify(accessToken, SECRET_KEY);
+  //   req.user = decoded.user;
+  //   return next();
+  // } catch (error) {
+  //   return res.status(401).json({ success: false, error });
+  // }
+
+  const bearerHeader = req.headers["authorization"];
+  const token = req.cookies.auth;
+  if (bearerHeader) {
+    const bearer = bearerHeader.split(" ");
+    const bearerToken = bearer[1];
+    jwt.verify(bearerToken, process.env.SECRET, (err, data) => {
+      if (err) {
+        return res.json({ success: false, error: "Token doen't match" });
+      }
+      req.user = data;
+      next();
+    });
+  } else if (token) {
+    jwt.verify(token, process.env.SECRET, (err, data) => {
+      if (err) {
+        return res.json({ success: false, error: "Token doen't match" });
+      }
+      req.user = data;
+      next();
+    });
+  } else {
+    return res.json({ success: false, error: "Token not Found" });
   }
 };

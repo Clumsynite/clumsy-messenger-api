@@ -15,12 +15,7 @@ exports.login = (req, res, next) => {
       }
       await User.findByIdAndUpdate({ _id: user._id }, { connected: true });
       const token = jwt.sign({ user }, process.env.SECRET);
-      res.cookie("auth", token, {
-        path: "/",
-        secure: true,
-        httpOnly: true,
-        sameSite: "none",
-      });
+      res.cookie("auth", token);
       res.json({
         user,
         success: true,

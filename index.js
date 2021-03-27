@@ -1,8 +1,9 @@
 require("dotenv").config();
 const express = require("express");
-const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
 const passport = require("passport");
 const cors = require("cors");
+const helmet = require("helmet");
 const path = require("path");
 const fs = require("fs");
 const showdown = require("showdown");
@@ -19,7 +20,9 @@ const app = express();
 // Initialise Mongo DB and Passport
 require("./config");
 
+app.use(helmet());
 app.use(logger("dev"));
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -47,9 +50,9 @@ app.get("/", (req, res) => {
   });
 });
 app.use(function (req, res, next) {
-  res.locals.user = req.user
-  next()
-})
+  res.locals.user = req.user;
+  next();
+});
 // app.use("/", indexRouter);
 app.use("/users", userRouter);
 app.use("/auth", authRouter);
