@@ -8,6 +8,7 @@ const userSchema = new Schema(
       type: String,
       default: () => uuidv4().replace(/\-/g, ""),
     },
+    photo: { type: String, unique: true },
     username: { type: String, unique: true, required: true },
     firstname: { type: String, required: true },
     lastname: { type: String, required: true },
