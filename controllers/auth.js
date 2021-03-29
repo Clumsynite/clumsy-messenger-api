@@ -15,7 +15,8 @@ exports.login = (req, res, next) => {
         return res.json({ error, success: false });
       }
       await User.findByIdAndUpdate({ _id: user._id }, { connected: true });
-      const token = jwt.sign({ user }, process.env.SECRET);
+      const { _doc } = user;
+      const token = jwt.sign({ ..._doc, photo: "" }, process.env.SECRET);
       res.cookie("auth", token);
       res.json({
         user,
@@ -29,7 +30,7 @@ exports.login = (req, res, next) => {
 
 exports.logout = async (req, res) => {
   try {
-    const { _id } = req.user.user;
+    const { _id } = req.user;
     await User.findByIdAndUpdate({ _id }, { connected: false });
     req.logout();
     res.clearCookie("auth");

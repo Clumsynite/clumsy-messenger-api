@@ -31,6 +31,7 @@ app.use(
   cors({
     credentials: true,
     origin: true,
+    methods: ["POST", "GET", "PUT", "DELETE", "OPTIONS"],
   })
 );
 // app.set("trust proxy", 1);
