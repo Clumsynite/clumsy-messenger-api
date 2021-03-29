@@ -13,7 +13,7 @@ const http = require("http");
 
 const userRouter = require("./routes/user");
 const authRouter = require("./routes/auth");
-const secureRouter = require("./routes/secure");
+const utilsRouter = require("./routes/utils");
 
 const app = express();
 
@@ -31,9 +31,10 @@ app.use(
   cors({
     credentials: true,
     origin: true,
+    methods: ["POST", "GET", "PUT", "DELETE"],
   })
 );
-app.set("trust proxy", 1);
+// app.set("trust proxy", 1);
 // Cors End
 app.use(express.static(__dirname));
 app.use(express.static(path.join(__dirname, "public")));
@@ -56,7 +57,7 @@ app.use(function (req, res, next) {
 // app.use("/", indexRouter);
 app.use("/users", userRouter);
 app.use("/auth", authRouter);
-app.use("/secure", secureRouter);
+app.use("/utils", utilsRouter);
 
 /** catch 404 and forward to error handler */
 app.use("*", (req, res) => {

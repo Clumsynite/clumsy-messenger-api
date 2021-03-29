@@ -27,22 +27,6 @@ const SECRET_KEY = process.env.SECRET;
 // };
 
 exports.decode = async (req, res, next) => {
-  // if (!req.headers["authorization"]) {
-
-  // console.log("REQ USER", req.user)
-  //   return res
-  //     .status(400)
-  //     .json({ success: false, error: "No access token provided" });
-  // }
-  // const accessToken = req.headers.authorization.split(" ")[1];
-  // try {
-  //   const decoded = jwt.verify(accessToken, SECRET_KEY);
-  //   req.user = decoded.user;
-  //   return next();
-  // } catch (error) {
-  //   return res.status(401).json({ success: false, error });
-  // }
-
   const bearerHeader = req.headers["authorization"];
   const token = req.cookies.auth;
   if (bearerHeader) {

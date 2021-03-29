@@ -26,8 +26,11 @@ exports.login = (req, res, next) => {
   })(req, res);
 };
 
-exports.logout = (req, res) => {
-  req.logout();
-  res.clearCookie("auth");
-  res.json({ msg: "Logged out successfully", success: true });
+exports.logout = async (req, res) => {
+  try {
+    await User.findByIdAndUpdate({ _id: req.user._id }, { connected: false });
+    req.logout();
+    res.clearCookie("auth");
+    res.json({ msg: "Logged out successfully", success: true });
+  } catch (error) {}
 };
