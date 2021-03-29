@@ -63,7 +63,7 @@ app.use("/utils", utilsRouter);
 app.use("*", (req, res) => {
   return res.status(404).json({
     success: false,
-    message: "API endpoint doesnt exist",
+    error: "API endpoint doesn't exists",
   });
 });
 

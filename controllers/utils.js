@@ -10,10 +10,14 @@ exports.checkUsername = async (req, res) => {
   }
 };
 
-exports.allUsers = async (req, res) => {
+exports.connectedUsers = async (req, res) => {
   try {
-    const users = await User.find({});
-    res.json({ msg: "Successfully retreived User List", users });
+    const users = await User.find({ connected: true });
+    res.json({
+      msg: "Successfully retreived Cnnected User List",
+      users,
+      success: true,
+    });
   } catch (error) {
     console.log(error);
     res.json({ error });
