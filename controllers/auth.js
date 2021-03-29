@@ -6,12 +6,13 @@ exports.login = (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
     if (err || !user) {
       return res.json({
-        error: "Something is not right",
+        error: "Something is not right\ntry a different username or password",
+        success: false,
       });
     }
     req.login(user, async (error) => {
       if (error) {
-        res.json({ error, success: false });
+        return res.json({ error, success: false });
       }
       await User.findByIdAndUpdate({ _id: user._id }, { connected: true });
       const token = jwt.sign({ user }, process.env.SECRET);
@@ -28,9 +29,12 @@ exports.login = (req, res, next) => {
 
 exports.logout = async (req, res) => {
   try {
-    await User.findByIdAndUpdate({ _id: req.user._id }, { connected: false });
+    const { _id } = req.user.user;
+    await User.findByIdAndUpdate({ _id }, { connected: false });
     req.logout();
     res.clearCookie("auth");
-    res.json({ msg: "Logged out successfully", success: true });
-  } catch (error) {}
+    return res.json({ msg: "Logged out successfully", success: true });
+  } catch (error) {
+    return res.json({ error: "Logout Failed", success: false });
+  }
 };

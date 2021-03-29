@@ -8,13 +8,13 @@ passport.use(
     User.findOne({ username })
       .then((user) => {
         if (!user) {
-          return done(null, false, { msg: "Inocrrect username" });
+          return done(null, false, { error: "Inocrrect username" });
         }
         bcrypt.compare(password, user.password, (err, data) => {
           if (data) {
             return done(null, user);
           } else {
-            return done(null, false, { msg: "Incorrect password" });
+            return done(null, false, { error: "Incorrect password" });
           }
         });
       })
