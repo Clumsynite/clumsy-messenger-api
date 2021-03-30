@@ -12,7 +12,10 @@ exports.checkUsername = async (req, res) => {
 
 exports.connectedUsers = async (req, res) => {
   try {
-    const users = await User.find({ connected: true });
+    const users = await User.find({
+      connected: true,
+      username: { $ne: req.user.username },
+    });
     res.json({
       msg: "Successfully retreived Cnnected User List",
       users,
@@ -20,6 +23,26 @@ exports.connectedUsers = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    res.json({ error });
+    res.json({ error, success: false });
+  }
+};
+
+exports.otherUsers = async (req, res) => {
+  try {
+    const users = await User.find({
+      username: { $ne: req.user.username },
+    });
+    users.map((doc) => {
+      const { _doc } = doc;
+      _doc.con = _doc.connected ? 1 : 0;
+    });
+    res.json({
+      msg: "Successfully retreived Cnnected User List",
+      users,
+      success: true,
+    });
+  } catch (error) {
+    console.log(error);
+    res.json({ error, success: false });
   }
 };
