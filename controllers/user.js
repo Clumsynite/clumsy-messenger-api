@@ -52,16 +52,17 @@ exports.onCreateUser = async (req, res) => {
 
 exports.onUpdateUser = async (req, res) => {
   try {
-    const user = await User.findByIdAndUpdate(
+    await User.findByIdAndUpdate(
       { _id: req.user._id },
       {
         ...req.body,
       }
     );
-
+    const user = await User.findOne({ _id: req.user._id });
+    console.log(user);
     return res
       .status(200)
-      .json({ success: true, user, msg: "Signup Successful" });
+      .json({ success: true, user, msg: "Update Successful" });
   } catch (error) {
     console.error("User controller | onCreateUser | Error: ", error);
     return res.status(500).json({ success: false, error });
