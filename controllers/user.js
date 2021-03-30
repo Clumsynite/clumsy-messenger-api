@@ -23,6 +23,7 @@ exports.onGetUserByUsername = async (req, res) => {
     return res.status(500).json({ success: false, error });
   }
 };
+
 exports.onCreateUser = async (req, res) => {
   try {
     const { username, password } = req.body;
@@ -48,6 +49,25 @@ exports.onCreateUser = async (req, res) => {
     return res.status(500).json({ success: false, error });
   }
 };
+
+exports.onUpdateUser = async (req, res) => {
+  try {
+    const user = await User.findByIdAndUpdate(
+      { _id: req.user._id },
+      {
+        ...req.body,
+      }
+    );
+
+    return res
+      .status(200)
+      .json({ success: true, user, msg: "Signup Successful" });
+  } catch (error) {
+    console.error("User controller | onCreateUser | Error: ", error);
+    return res.status(500).json({ success: false, error });
+  }
+};
+
 exports.onDeleteUserByUsername = async (req, res) => {
   try {
     const user = await User.deleteOne({ username });
