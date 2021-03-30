@@ -16,6 +16,7 @@ const userSchema = new Schema(
     password: { type: String, required: true },
     joined: { type: Date, default: Date.now },
     connected: { type: Boolean, default: false },
+    lastOnline: { type: Date },
   },
   {
     timestamps: true,

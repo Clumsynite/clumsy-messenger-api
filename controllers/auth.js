@@ -31,11 +31,14 @@ exports.login = (req, res, next) => {
 exports.logout = async (req, res) => {
   try {
     const { _id } = req.user;
-    await User.findByIdAndUpdate({ _id }, { connected: false });
+    await User.findByIdAndUpdate(
+      { _id },
+      { connected: false, lastOnline: new Date() }
+    );
     req.logout();
     res.clearCookie("auth");
     return res.json({ msg: "Logged out successfully", success: true });
   } catch (error) {
-    return res.json({ error: "Logout Failed", success: false });
+    return res.json({ error: "Logout Failed\n" + error, success: false });
   }
 };
