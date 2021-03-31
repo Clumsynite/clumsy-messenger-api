@@ -12,13 +12,13 @@ exports.checkUsername = async (req, res) => {
 
 exports.connectedUsers = async (req, res) => {
   try {
-    const users = await User.find({
+    const connected = await User.countDocuments({
       connected: true,
       username: { $ne: req.user.username },
     });
     res.json({
-      msg: "Successfully retreived Cnnected User List",
-      users,
+      msg: "Successfully retreived Cnnected User Count",
+      connected,
       success: true,
     });
   } catch (error) {
