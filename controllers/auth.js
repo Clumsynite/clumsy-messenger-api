@@ -21,7 +21,8 @@ exports.login = (req, res, next) => {
         // secure: req.secure || req.headers['x-forwarded-proto'] === 'https'
         path: '/',
         secure: true,
-        httpOnly: true
+        httpOnly: true,
+        sameSite: "lax"
       });
       res.json({
         user,
