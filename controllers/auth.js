@@ -18,6 +18,7 @@ exports.login = (req, res, next) => {
       const { _doc } = user;
       const token = jwt.sign({ ..._doc, photo: "" }, process.env.SECRET);
       res.cookie("auth", token, {
+        path: "/",
         secure: true,
         httpOnly: true,
         sameSite: "none",
@@ -40,7 +41,7 @@ exports.logout = async (req, res) => {
       { connected: false, lastOnline: new Date() }
     );
     req.logout();
-    res.clearCookie("auth");
+    res.clearCookie("auth", { path: "/", sameSite: "none" });
     return res.json({ msg: "Logged out successfully", success: true });
   } catch (error) {
     return res.json({ error: "Logout Failed\n" + error, success: false });
