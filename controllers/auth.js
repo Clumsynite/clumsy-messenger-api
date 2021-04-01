@@ -22,7 +22,7 @@ exports.login = (req, res, next) => {
         path: '/',
         secure: true,
         httpOnly: true,
-        sameSite: "lax"
+        sameSite: "none"
       });
       res.json({
         user,
