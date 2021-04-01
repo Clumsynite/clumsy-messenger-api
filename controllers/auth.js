@@ -41,7 +41,7 @@ exports.logout = async (req, res) => {
       { connected: false, lastOnline: new Date() }
     );
     req.logout();
-    res.clearCookie("auth");
+    res.clearCookie("auth", { path: "/" });
     return res.json({ msg: "Logged out successfully", success: true });
   } catch (error) {
     return res.json({ error: "Logout Failed\n" + error, success: false });
