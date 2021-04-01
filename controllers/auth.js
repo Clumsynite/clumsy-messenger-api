@@ -22,7 +22,8 @@ exports.login = (req, res, next) => {
         path: '/',
         secure: true,
         httpOnly: true,
-        sameSite: "none"
+        sameSite: "none",
+        // signed: true
       });
       res.json({
         user,

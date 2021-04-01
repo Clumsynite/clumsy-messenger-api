@@ -34,7 +34,7 @@ app.use(
     methods: ["POST", "GET", "PUT", "DELETE", "OPTIONS"],
   })
 );
-// app.set("trust proxy", 1);
+app.set("trust proxy", 1);
 // Cors End
 app.use(express.static(__dirname));
 app.use(express.static(path.join(__dirname, "public")));
