@@ -18,12 +18,10 @@ exports.login = (req, res, next) => {
       const { _doc } = user;
       const token = jwt.sign({ ..._doc, photo: "" }, process.env.SECRET);
       res.cookie("auth", token, {
-        // secure: req.secure || req.headers['x-forwarded-proto'] === 'https'
         path: '/',
         secure: true,
         httpOnly: true,
         sameSite: "none",
-        // signed: true
       });
       res.json({
         user,
