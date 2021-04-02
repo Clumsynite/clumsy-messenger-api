@@ -41,8 +41,12 @@ exports.logout = async (req, res) => {
       { connected: false, lastOnline: new Date() }
     );
     req.logout();
-    res.clearCookie("auth");
-    // , { path: "/", domain: "clumsy-messenger.herokuapp.com",success: true }
+    res.clearCookie("auth", {
+      path: "/",
+      domain: "clumsy-messenger.herokuapp.com",
+      secure: true,
+      sameSite: "none",
+    });
     return res.json({ msg: "Logged out successfully", success: true });
   } catch (error) {
     return res.json({ error: "Logout Failed\n" + error, success: false });
