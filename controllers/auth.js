@@ -47,13 +47,6 @@ exports.logout = async (req, res) => {
       httpOnly: true,
       sameSite: "none",
     });
-    // res.cookie("auth", "", {
-    //   path: "/",
-    //   secure: true,
-    //   httpOnly: true,
-    //   sameSite: "none",
-    //   expires: new Date(1),
-    // });
     return res.json({ msg: "Logged out successfully", success: true });
   } catch (error) {
     return res.json({ error: "Logout Failed\n" + error, success: false });
