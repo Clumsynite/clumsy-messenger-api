@@ -18,9 +18,9 @@ exports.login = (req, res, next) => {
       const { _doc } = user;
       const token = jwt.sign({ ..._doc, photo: "" }, process.env.SECRET);
       res.cookie("auth", token, {
-        // path: "/",
+        path: "/",
         secure: true,
-        // httpOnly: true,
+        httpOnly: true,
         sameSite: "none",
       });
       res.json({
@@ -41,11 +41,12 @@ exports.logout = async (req, res) => {
       { connected: false, lastOnline: new Date() }
     );
     req.logout();
-    res.clearCookie("auth", {
+    res.cookie("auth", "", {
       path: "/",
-      domain: "clumsy-messenger.herokuapp.com",
       secure: true,
+      httpOnly: true,
       sameSite: "none",
+      expires: new Date(1),
     });
     return res.json({ msg: "Logged out successfully", success: true });
   } catch (error) {
