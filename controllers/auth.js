@@ -1,6 +1,7 @@
 const passport = require("passport");
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
+const io = require("../index").io;
 
 exports.login = (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
@@ -23,6 +24,7 @@ exports.login = (req, res, next) => {
         httpOnly: true,
         sameSite: "none",
       });
+      io.emit("refreshUsers");
       res.json({
         user,
         success: true,
@@ -47,6 +49,7 @@ exports.logout = async (req, res) => {
       httpOnly: true,
       sameSite: "none",
     });
+    io.emit("refreshUsers");
     return res.json({ msg: "Logged out successfully", success: true });
   } catch (error) {
     return res.json({ error: "Logout Failed\n" + error, success: false });

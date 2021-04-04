@@ -25,6 +25,7 @@
     "passport-local": "^1.0.0",
     "pug": "^3.0.2",
     "showdown": "^1.9.1",
+    "socket.io": "^4.0.1",
     "uuid": "^8.3.2"
   }
 }

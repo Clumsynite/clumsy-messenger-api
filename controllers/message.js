@@ -1,4 +1,5 @@
 const Message = require("../models/Message");
+const io = require("../index").io;
 
 exports.getUserMessages = async (req, res) => {
   try {
@@ -19,6 +20,7 @@ exports.createNewMessage = async (req, res) => {
       ...req.body,
       from: _id,
     }).save();
+    io.emit("refreshMessages");
     return res
       .status(200)
       .json({ success: true, message, msg: "New Message Created" });

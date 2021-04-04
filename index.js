@@ -10,13 +10,18 @@ const showdown = require("showdown");
 const converter = new showdown.Converter();
 const logger = require("morgan");
 const http = require("http");
+const socket = require("socket.io");
+
+const app = express();
+const server = http.createServer(app);
+
+const io = socket(server, { cors: { origin: "*" } });
+exports.io = io;
 
 const userRouter = require("./routes/user");
 const authRouter = require("./routes/auth");
 const utilsRouter = require("./routes/utils");
 const messageRouter = require("./routes/message");
-
-const app = express();
 
 // Initialise Mongo DB and Passport
 require("./config");
@@ -55,6 +60,10 @@ app.use(function (req, res, next) {
   res.locals.user = req.user;
   next();
 });
+
+io.on("connection", function (socket) {
+  // socket.emit("refreshUsers");
+});
 // app.use("/", indexRouter);
 app.use("/users", userRouter);
 app.use("/auth", authRouter);
@@ -70,7 +79,6 @@ app.use("*", (req, res) => {
 });
 
 /** Create HTTP server. */
-const server = http.createServer(app);
 server.listen(process.env.PORT || 5000);
 /** Event listener for HTTP server "listening" event. */
 server.on("listening", () => {
