@@ -11,6 +11,7 @@ const converter = new showdown.Converter();
 const logger = require("morgan");
 const http = require("http");
 const socket = require("socket.io");
+const User = require("./models/User");
 
 const app = express();
 const server = http.createServer(app);
@@ -61,8 +62,42 @@ app.use(function (req, res, next) {
   next();
 });
 
+const updateUser = async (connected, _id) => {
+  try {
+    if (_id !== undefined) {
+      if (connected) {
+        await User.findByIdAndUpdate({ _id }, { connected });
+      } else {
+        await User.findByIdAndUpdate(
+          { _id },
+          { connected, lastOnline: new Date() }
+        );
+      }
+    }
+  } catch (error) {
+    console.error("Socket ERROR in Update Connection Status", error);
+  }
+};
+
 io.on("connection", function (socket) {
-  // socket.emit("refreshUsers");
+  socket.on("connect user", (data) => {
+    try {
+      socket.userID = data;
+      updateUser(true, socket.userID);
+      socket.broadcast.emit("refreshUsers");
+    } catch (error) {
+      console.error("Socket ERROR in connect user", error);
+    }
+  });
+
+  socket.on("disconnect", () => {
+    try {
+      updateUser(false, socket.userID);
+      socket.broadcast.emit("refreshUsers");
+    } catch (error) {
+      console.error("Socket ERROR in disconnect", error);
+    }
+  });
 });
 // app.use("/", indexRouter);
 app.use("/users", userRouter);
