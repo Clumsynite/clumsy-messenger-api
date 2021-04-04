@@ -14,6 +14,7 @@ const http = require("http");
 const userRouter = require("./routes/user");
 const authRouter = require("./routes/auth");
 const utilsRouter = require("./routes/utils");
+const messageRouter = require("./routes/message");
 
 const app = express();
 
@@ -58,6 +59,7 @@ app.use(function (req, res, next) {
 app.use("/users", userRouter);
 app.use("/auth", authRouter);
 app.use("/utils", utilsRouter);
+app.use("/message", messageRouter);
 
 /** catch 404 and forward to error handler */
 app.use("*", (req, res) => {

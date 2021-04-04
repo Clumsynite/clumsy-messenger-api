@@ -11,7 +11,7 @@ const messageSchema = new Schema(
     from: { type: Schema.Types.ObjectId, required: true },
     to: { type: Schema.Types.ObjectId, required: true },
     message: { type: String, required: true },
-    added: { type: Date, default: Date.now },
+    created: { type: Date, default: Date.now },
   },
   {
     timestamps: true,
