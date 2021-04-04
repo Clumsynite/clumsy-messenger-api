@@ -8,14 +8,16 @@ exports.getUserMessages = async (req, res) => {
       .status(200)
       .json({ success: true, messages, msg: "Fetched User Related Messages" });
   } catch (error) {
-    res.json({ error });
+    res.json({ error, success: false });
   }
 };
 
 exports.createNewMessage = async (req, res) => {
   try {
+    const { _id } = req.user;
     const message = await new Message({
       ...req.body,
+      from: _id,
     }).save();
     return res
       .status(200)

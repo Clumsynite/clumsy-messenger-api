@@ -6,5 +6,4 @@ const { decode } = require("../middlewares/jwt");
 router.get("/", decode, messageController.getUserMessages);
 router.post("/new", decode, messageController.createNewMessage);
 
-
 module.exports = router;
