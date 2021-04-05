@@ -64,7 +64,7 @@ app.use(function (req, res, next) {
 
 const updateUser = async (connected, _id) => {
   try {
-    if (_id !== undefined) {
+    if (_id !== undefined && _id !== null) {
       if (connected) {
         await User.findByIdAndUpdate({ _id }, { connected });
       } else {
