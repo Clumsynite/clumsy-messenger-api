@@ -33,7 +33,7 @@ exports.createNewMessage = async (req, res) => {
 exports.deleteMessage = async (req, res) => {
   try {
     const { id } = req.params;
-    const message = await Message.deleteOne({ _id: id });
+    const message = await Message.deleteOne({ _id: id, from: req.user._id });
     io.emit("refreshMessages");
     return res.status(200).json({
       success: true,
